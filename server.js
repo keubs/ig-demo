@@ -4,7 +4,7 @@ const exphbs = require('express-handlebars');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
-const flash = require('connect-flash');
+// const flash = require('connect-flash');
 // const session = require('express-session');
 // const passport = require('passport');
 const morgan = require('morgan');
@@ -81,7 +81,7 @@ app.use(
 );
 
 // Connect Flash
-app.use(flash());
+// app.use(flash());
 
 // Global vars
 app.use(function(req, res, next) {
