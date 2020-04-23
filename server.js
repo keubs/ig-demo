@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
 const session = require('express-session');
-const passport = require('passport');
+// const passport = require('passport');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -56,9 +56,9 @@ if (env === 'development') {
   app.use(morgan('dev'));
 }
 
-require('./config/passport')(passport);
-app.use(passport.initialize());
-app.use(passport.session());
+// require('./config/passport')(passport);
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // Express Validator
 app.use(
