@@ -11,7 +11,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const compression = require('compression');
 
-const db = require('./config/database');
+// const db = require('./config/database');
 
 // ENV
 const env = process.env.NODE_ENV || 'development';
