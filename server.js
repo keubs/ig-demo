@@ -5,7 +5,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 const flash = require('connect-flash');
-const session = require('express-session');
+// const session = require('express-session');
 // const passport = require('passport');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -44,13 +44,13 @@ app.use(helmet());
 app.use(compression());
 
 // Express Session
-app.use(
-  session({
-    secret: config.site.secret,
-    saveUninitialized: true,
-    resave: true
-  })
-);
+// app.use(
+//   session({
+//     secret: config.site.secret,
+//     saveUninitialized: true,
+//     resave: true
+//   })
+// );
 
 if (env === 'development') {
   app.use(morgan('dev'));
