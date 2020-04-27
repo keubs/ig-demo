@@ -36,13 +36,17 @@ async function exchangeTokenForCode(req) {
   let parsedUrl = url.parse(req.url);
   let parsedQs = querystring.parse(parsedUrl.query);
   let code = parsedQs['code'];
-  const request = await makeRequest(code);
-
-  console.log(request);
-  return {
-    access_token: request.access_token,
-    user_id: request.user_id
+  let request = await makeRequest(code);
+  let response = JSON.parse(request.body);
+  let output = (request.status === 200) ?
+  {
+    access_token: response.access_token,
+    user_id: response.user_id
   }
+  : {
+    error: response.error_message,
+  };
+  return output;
 }
 
 async function makeRequest(code) {
@@ -57,7 +61,11 @@ async function makeRequest(code) {
     })
     .post(OAUTH_URL)
     .then(({statusCode, body, headers}) => {
-        return body;
+      console.log(statusCode);
+        return {
+          body: body,
+          status: statusCode,
+        };
     })
     .catch((e) => {
         console.log(e);
