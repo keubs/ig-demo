@@ -18,7 +18,11 @@ router.get('/', function(req, res) {
 
 router.get('/exchange', async function(req, res) {
   res.render('exchange', await exchangeTokenForCode(req));
-})
+});
+
+router.get('/media', async function(req, res) {
+  res.render('media', await getMediaForUser(req));
+});
 
 function getIndex(req) {
   let parsedUrl = url.parse(req.url);
@@ -36,7 +40,7 @@ async function exchangeTokenForCode(req) {
   let parsedUrl = url.parse(req.url);
   let parsedQs = querystring.parse(parsedUrl.query);
   let code = parsedQs['code'];
-  let request = await makeRequest(code);
+  let request = await makeRequestForToken(code);
   let response = JSON.parse(request.body);
   let output = (request.status === 200) ?
   {
@@ -49,7 +53,19 @@ async function exchangeTokenForCode(req) {
   return output;
 }
 
-async function makeRequest(code) {
+async function getMediaForUser(req) {
+  let parsedUrl = url.parse(req.url);
+  let parsedQs = querystring.parse(parsedUrl.query);
+  let token = parsedQs['token'];
+  let request;
+  if(token) request = await getMedia(token);
+  console.log(request.data.data);
+  return {
+    data: request.data.data,
+  };
+}
+
+async function makeRequestForToken(code) {
 
   data = curl
     .setBody({
@@ -70,20 +86,23 @@ async function makeRequest(code) {
     .catch((e) => {
         console.log(e);
     });
-  // const fd = new FormData();
-  // const data = await axios({
-  //   method: "POST",
-  //   url: "https://postman-echo.com/post", 
-  //   data: fd,
-  //   headers: fd.getHeaders(),
-  // }).then((response) => {
-  //   return response
-  // }).catch((error) => {
-  //   return error;
-  // })
 
   return data;
 }
 
+
+async function getMedia(token) {
+  const fields = 'id,media_type,media_url,username,timestamp';
+  
+  const resp = await axios.get(
+    `https://graph.instagram.com/me/media?fields=${fields}&access_token=${token}`
+  ).then((response) => {
+    return response;
+  }).catch((error) => {
+    return error;
+  });
+
+  return resp;
+}
 
 module.exports = router;
