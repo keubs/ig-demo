@@ -1,10 +1,15 @@
 <div class="container">
-    <h1>Exchanging an access code for a token</h1>
-    <h2>Access Token:</h2>
+    <h1>Step 2: Exchanging an access code for a short-lived token</h1>
+    <h2>Short-lived Access Token:</h2>
     <pre>{{access_token}}</pre>
     <h2>User ID:</h2>
     <pre>{{user_id}}</pre>
 
+    <h2>(Optional) Exchange short lived token for long-lived</h2>
+    {{#if access_token}}
+        <a href="/long-lived?token={{access_token}}">Click here to exchange for long-lived token</a>
+    {{/if}}
+    <h2>User Media</h2>
     {{#if access_token}}
         <a href="/media?token={{access_token}}">Click here to query user media</a>
     {{/if}}

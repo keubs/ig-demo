@@ -10,7 +10,7 @@ const CLIENT_ID = '550487078925958';
 const CLIENT_SECRET = 'df535ebeffa7d35d37e693e78c731a06'
 const REDIRECT_URI = 'https://keubs.webfactional.com/';
 const OAUTH_URL = "https://api.instagram.com/oauth/access_token";
-const API_URL = "https://graph.instagram.com/";
+const API_URL = "https://graph.instagram.com";
 
 router.get('/', function(req, res) {
   res.render('index', getIndex(req));
@@ -19,6 +19,10 @@ router.get('/', function(req, res) {
 router.get('/exchange', async function(req, res) {
   res.render('exchange', await exchangeTokenForCode(req));
 });
+
+router.get('/long-lived', async function(req, res) {
+  res.render('longlived', await exchangeShortTokenForLong(req));
+})
 
 router.get('/media', async function(req, res) {
   res.render('media', await getMediaForUser(req));
@@ -53,6 +57,22 @@ async function exchangeTokenForCode(req) {
   return output;
 }
 
+async function exchangeShortTokenForLong(req) {
+  let parsedUrl = url.parse(req.url);
+  let parsedQs = querystring.parse(parsedUrl.query);
+  let code = parsedQs['token'];
+  let request = await getLongLivedToken(code);
+  console.log(request);
+  let output = (request.status === 200) ?
+  {
+    access_token: request.body.access_token,
+  }
+  : {
+    error: response.error,
+  };
+  return output;
+}
+
 async function getMediaForUser(req) {
   let parsedUrl = url.parse(req.url);
   let parsedQs = querystring.parse(parsedUrl.query);
@@ -76,8 +96,7 @@ async function makeRequestForToken(code) {
       "code": code,
     })
     .post(OAUTH_URL)
-    .then(({statusCode, body, headers}) => {
-      console.log(statusCode);
+    .then(({statusCode, body}) => {
         return {
           body: body,
           status: statusCode,
@@ -90,12 +109,27 @@ async function makeRequestForToken(code) {
   return data;
 }
 
+async function getLongLivedToken(token) {
+  const resp = await axios.get(
+    `${API_URL}/access_token?grant_type=ig_exchange_token&client_secret=${CLIENT_SECRET}&access_token=${token}`
+  ).then((response) => {
+    return {
+      status: response.status,
+      body: response.data
+    };
+  }).catch((error) => {Z
+    return error;
+  });
+
+  return resp;
+}
+
 
 async function getMedia(token) {
   const fields = 'id,media_type,media_url,username,timestamp';
   
   const resp = await axios.get(
-    `https://graph.instagram.com/me/media?fields=${fields}&access_token=${token}`
+    `${API_URL}/me/media?fields=${fields}&access_token=${token}`
   ).then((response) => {
     return response;
   }).catch((error) => {
