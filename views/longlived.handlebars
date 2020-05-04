@@ -1,7 +1,11 @@
 <div class="container">
-    <h2>Long-lived access token</h2>
+    <h2>Long-lived access token:</h2>
     <pre>
         {{access_token}}
+    </pre>
+    <h2>Expires:</h2>
+    <pre>
+        {{expiration}}
     </pre>
     {{#if access_token}}
         <a href="/media?token={{access_token}}">Click here to query user media</a>

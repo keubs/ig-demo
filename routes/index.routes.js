@@ -62,10 +62,12 @@ async function exchangeShortTokenForLong(req) {
   let parsedQs = querystring.parse(parsedUrl.query);
   let code = parsedQs['token'];
   let request = await getLongLivedToken(code);
-  console.log(request);
+  t = new Date();
+  t.setSeconds(t.getSeconds() + request.body.expires_in);
   let output = (request.status === 200) ?
   {
     access_token: request.body.access_token,
+    expiration: t.toDateString(),
   }
   : {
     error: response.error,
@@ -92,7 +94,7 @@ async function makeRequestForToken(code) {
       "client_id": CLIENT_ID,
       "client_secret": CLIENT_SECRET,
       "grant_type": 'authorization_code',
-      "redirect_uri": 'https://keubs.webfactional.com/',
+      "redirect_uri": REDIRECT_URI,
       "code": code,
     })
     .post(OAUTH_URL)
@@ -117,7 +119,7 @@ async function getLongLivedToken(token) {
       status: response.status,
       body: response.data
     };
-  }).catch((error) => {Z
+  }).catch((error) => {
     return error;
   });
 

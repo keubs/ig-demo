@@ -4,7 +4,7 @@
   "description": "Boilerplate",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./test.sh",
     "start": "./node_modules/.bin/nodemon -e js,handlebars server.js",
     "babel": "babel --presets es2015 ./public/assets/js/src/main.js -o ./public/assets/js/dist/main.bundle.js",
     "prettier": "prettier --single-quote --print-width 80 --write '**/*.js'"
