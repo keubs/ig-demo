@@ -81,10 +81,15 @@ async function getMediaForUser(req) {
   let token = parsedQs['token'];
   let request;
   if(token) request = await getMedia(token);
-  console.log(request.data.data);
-  return {
-    data: request.data.data,
+  console.log(request);
+  let output = (request.status === 200) ?
+  {
+    data: request.body.data,
+  }
+  : {
+    error: request,
   };
+  return output;
 }
 
 async function makeRequestForToken(code) {
@@ -132,11 +137,14 @@ async function getMedia(token) {
   
   const resp = await axios.get(
     `${API_URL}/me/media?fields=${fields}&access_token=${token}`
-  ).then((response) => {
-    return response;
-  }).catch((error) => {
-    return error;
-  });
+    ).then((response) => {
+      return {
+        status: response.status,
+        body: response.data
+      };
+    }).catch((error) => {
+      return error;
+    });
 
   return resp;
 }

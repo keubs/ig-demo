@@ -4,7 +4,6 @@
   "description": "Boilerplate",
   "main": "server.js",
   "scripts": {
-    "test": "./test.sh",
     "start": "./node_modules/.bin/nodemon -e js,handlebars server.js",
     "babel": "babel --presets es2015 ./public/assets/js/src/main.js -o ./public/assets/js/dist/main.bundle.js",
     "prettier": "prettier --single-quote --print-width 80 --write '**/*.js'"

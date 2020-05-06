@@ -5,6 +5,10 @@
     <div className="App">
       <a href="https://api.instagram.com/oauth/authorize?client_id={{CLIENT_ID}}&redirect_uri={{REDIRECT_URI}}&scope=user_profile,user_media&response_type=code"}>Get authorization code</a>
     </div>
+    <fb:login-button 
+      scope="public_profile,email"
+      onlogin="checkLoginState();">
+    </fb:login-button>
     {{#if qs}}
       <h2>Step 1 - Request access via OAUTH</h2>
       <pre>
