@@ -17,15 +17,15 @@ router.get('/', function(req, res) {
 });
 
 router.get('/exchange', async function(req, res) {
-  res.render('exchange', await exchangeTokenForCode(req));
+  res.render('exchange', await getExchange(req));
 });
 
 router.get('/long-lived', async function(req, res) {
-  res.render('longlived', await exchangeShortTokenForLong(req));
+  res.render('longlived', await getLongLived(req));
 })
 
 router.get('/media', async function(req, res) {
-  res.render('media', await getMediaForUser(req));
+  res.render('media', await getMedia(req));
 });
 
 function getIndex(req) {
@@ -40,7 +40,7 @@ function getIndex(req) {
   }
 }
 
-async function exchangeTokenForCode(req) {
+async function getExchange(req) {
   let parsedUrl = url.parse(req.url);
   let parsedQs = querystring.parse(parsedUrl.query);
   let code = parsedQs['code'];
@@ -57,7 +57,7 @@ async function exchangeTokenForCode(req) {
   return output;
 }
 
-async function exchangeShortTokenForLong(req) {
+async function getLongLived(req) {
   let parsedUrl = url.parse(req.url);
   let parsedQs = querystring.parse(parsedUrl.query);
   let code = parsedQs['token'];
@@ -75,7 +75,7 @@ async function exchangeShortTokenForLong(req) {
   return output;
 }
 
-async function getMediaForUser(req) {
+async function getMedia(req) {
   let parsedUrl = url.parse(req.url);
   let parsedQs = querystring.parse(parsedUrl.query);
   let token = parsedQs['token'];
